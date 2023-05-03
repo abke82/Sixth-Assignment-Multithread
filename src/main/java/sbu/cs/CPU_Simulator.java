@@ -28,21 +28,12 @@ public class CPU_Simulator
             this.processingTime = processingTime;
             this.ID = ID;
         }
-
         public long getProcessingTime() {
             return processingTime;
         }
 
-        public void setProcessingTime(long processingTime) {
-            this.processingTime = processingTime;
-        }
-
         public String getID() {
             return ID;
-        }
-
-        public void setID(String ID) {
-            this.ID = ID;
         }
 
         /*
