@@ -14,7 +14,7 @@ import java.util.Comparator;
     a new thread for it. The main thread should wait for the task to fully
     execute and then join with it, before starting the next task.
 
-    Once a task is fully executed, add its ID to the executed tasks arraylist.
+    Once a task is fully executed, add its ID to the executed task arraylist.
     Use the tests provided in the test folder to ensure your code works correctly.
  */
 

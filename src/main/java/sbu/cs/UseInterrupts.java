@@ -10,6 +10,8 @@ package sbu.cs;
     Take note that you are NOT ALLOWED to change or delete any existing line of code.
  */
 
+import java.util.Arrays;
+
 public class UseInterrupts
 {
 /*
@@ -30,17 +32,24 @@ public class UseInterrupts
         @Override
         public void run() {
             System.out.println(this.getName() + " is Active.");
+            boolean flag = true;
 
             while (this.sleepCounter > 0)
             {
+//                if(Thread.interrupted()){
+//                    System.out.println(this.getName() + " has been interrupted");
+//                    break;
+//                }
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-
+                    System.out.println(this.getName() + " has been interrupted");
+                    flag = false;
+                    break;
                 }
                 finally {
                     this.sleepCounter--;
-                    System.out.println("Number of sleeps remaining: " + this.sleepCounter);
+                    if(flag) System.out.println("Number of sleeps remaining: " + this.sleepCounter);
                 }
             }
 
@@ -69,6 +78,10 @@ public class UseInterrupts
 
             for (int i = 0; i < 10; i += 3)
             {
+                if(Thread.interrupted()){
+                    System.out.println(this.getName() + " has been interrupted");
+                    break;
+                }
                 i -= this.value;
 
             }
@@ -85,10 +98,27 @@ public class UseInterrupts
 
         // TODO  Check if this thread runs for longer than 3 seconds (if it does, interrupt it)
 
+        try {
+            Thread.sleep(3000);
+        }catch (InterruptedException e){
+
+        }
+        finally {
+            sleepThread.interrupt();
+        }
+
         LoopThread loopThread = new LoopThread(3);
         loopThread.start();
 
         // TODO  Check if this thread runs for longer than 3 seconds (if it does, interrupt it)
+        try {
+            Thread.sleep(3000);
+        }catch (InterruptedException e){
+
+        }
+        finally {
+            loopThread.interrupt();
+        }
 
     }
 }
