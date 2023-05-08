@@ -16,7 +16,7 @@ public class FindMultiplesTest {
 
     @Test
     void testOne() {
-        int n = 9;
+        int n = 9; //3+6+9+5+7
         int target_sum = 30;
         assertEquals(target_sum, findMultiples.getSum(n));
     }

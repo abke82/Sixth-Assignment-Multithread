@@ -4,6 +4,9 @@ import javax.annotation.processing.ProcessingEnvironment;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /*
     For this exercise, you must simulate a CPU with a single core.
@@ -18,7 +21,7 @@ import java.util.Comparator;
     Use the tests provided in the test folder to ensure your code works correctly.
  */
 
-public class CPU_Simulator
+public class CPU2Core
 {
     public static class Task implements Runnable {
         private long processingTime;
@@ -28,12 +31,21 @@ public class CPU_Simulator
             this.processingTime = processingTime;
             this.ID = ID;
         }
+
         public long getProcessingTime() {
             return processingTime;
         }
 
+        public void setProcessingTime(long processingTime) {
+            this.processingTime = processingTime;
+        }
+
         public String getID() {
             return ID;
+        }
+
+        public void setID(String ID) {
+            this.ID = ID;
         }
 
         /*
@@ -64,16 +76,18 @@ public class CPU_Simulator
             }
         });
 
+        ExecutorService threadPool = Executors.newFixedThreadPool(2);
         for(int i=0; i < tasks.size(); i++){
-                Runnable runnable = new Task(tasks.get(i).getID(), tasks.get(i).getProcessingTime());
-                Thread thread = new Thread(runnable);
-                thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                System.out.println(e.getMessage());;
-            }
-                executedTasks.add(tasks.get(i).getID());
+            Task task = new Task(tasks.get(i).getID(), tasks.get(i).getProcessingTime());
+            threadPool.execute(task);
+            executedTasks.add(tasks.get(i).getID());
+        }
+        threadPool.shutdown();      // always call before awaitTermination
+
+        try {
+            threadPool.awaitTermination(100000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         return executedTasks;
@@ -84,6 +98,8 @@ public class CPU_Simulator
         tasks.add(new Task("a",5000));
         tasks.add(new Task("b",5000));
         tasks.add(new Task("c",2000));
+        tasks.add(new Task("e",30));
+        tasks.add(new Task("g",200));
 
         System.out.println(startSimulation(tasks));
     }
